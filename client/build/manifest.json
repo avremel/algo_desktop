@@ -1,0 +1,15 @@
+{
+  "short_name": "Algo Teams",
+  "name": "Algo Teams",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ede0f4",
+  "background_color": "#ede0f4"
+}
