@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.b12c95f0.css",
-    "main.js": "/static/js/main.f97c81dd.js",
+    "main.js": "/static/js/main.dd76f430.js",
     "static/media/algo-teams.svg": "/static/media/algo-teams.b5308ea383811d3087243a335ec7e266.svg",
     "static/media/montserrat-latin-700italic.woff": "/static/media/montserrat-latin-700italic.6779372f04095051c62e.woff",
     "static/media/montserrat-latin-800italic.woff": "/static/media/montserrat-latin-800italic.fe82abb0bcede51bf724.woff",
@@ -51,10 +51,10 @@
     "static/media/downvote.svg": "/static/media/downvote.c2e96646e7d66350df8e609ba5dc5a2d.svg",
     "static/media/upvote.svg": "/static/media/upvote.cac48af1f5085fdc71f28ca402cae2a3.svg",
     "main.b12c95f0.css.map": "/static/css/main.b12c95f0.css.map",
-    "main.f97c81dd.js.map": "/static/js/main.f97c81dd.js.map"
+    "main.dd76f430.js.map": "/static/js/main.dd76f430.js.map"
   },
   "entrypoints": [
     "static/css/main.b12c95f0.css",
-    "static/js/main.f97c81dd.js"
+    "static/js/main.dd76f430.js"
   ]
 }
