@@ -112,15 +112,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
     });
   };
 
-  const editAns = (
-    editedAnswerBody,
-    ansId,
-    algo,
-    answerDescription,
-    language_id,
-    theme,
-    output
-  ) => {
+  const editAns = (editedAnswerBody, ansId, algo, answerDescription, theme) => {
     updateAnswer({
       variables: {
         quesId,
@@ -128,9 +120,7 @@ const AnswerList = ({ quesId, answers, acceptedAnswer, quesAuthor }) => {
         code: btoa(editedAnswerBody),
         algo,
         answerDescription,
-        language_id,
         theme,
-        output,
       },
       update: () => {
         notify("Answer updated!");

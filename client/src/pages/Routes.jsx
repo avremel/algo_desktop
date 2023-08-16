@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import NavMenuDesktop from "../components/NavMenuDesktop";
 import RightSidePanel from "../components/RightSidePanel";
@@ -16,21 +17,29 @@ import { Container, Grid, Box } from "@material-ui/core";
 const Routes = () => {
   const { user } = useAuthContext();
   const location = useLocation();
-  const isQuestionPage =
-    location.pathname.startsWith("/questions/") &&
-    location.pathname.length > "/questions/".length;
-  console.log({ user });
-  return isQuestionPage ? (
-    <Box style={{ mr: 2 }}>
-      <Switch>
-        <Route exact path="/questions/:quesId">
-          <QuestionPage />
-        </Route>
-      </Switch>
-    </Box>
-  ) : (
+  // const [currentURL, setCurrentURL] = useState(null);
+  // console.log("currentURL", currentURL);
+
+  // useEffect(() => {
+  //   function handleMessage(event) {
+  //     console.log("event", event.data);
+  //     if (
+  //       event.data.extension === "algoTeams" &&
+  //       event.data.event === "setURL"
+  //     ) {
+  //       setCurrentURL(event.data.currentProblem);
+  //     }
+  //   }
+
+  //   window.addEventListener("message", handleMessage);
+  //   return () => {
+  //     window.removeEventListener("message", handleMessage);
+  //   };
+  // }, []);
+
+  return (
     <Container disableGutters>
-      <Grid container direction="row" wrap="nowrap" justify="space-between">
+      <Grid container direction="row" justify="flex-start">
         <Switch>
           <Route exact path="/">
             <NavMenuDesktop />
@@ -60,7 +69,7 @@ const Routes = () => {
             <NavMenuDesktop />
             <UserPage />
           </Route>
-          <Route exact path="/questions/:quesId">
+          <Route path="/questions/:quesId">
             <QuestionPage />
           </Route>
           <Route exact path="/tags/:tagName">

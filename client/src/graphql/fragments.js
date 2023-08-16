@@ -28,11 +28,17 @@ export const ANSWER_DETAILS = gql`
       ...AuthorDetails
     }
     code
-    language_id
     theme
     algo
+    memory
+    lang
+    memory_percentile
+    runtime_percentile
+    total_correct
+    total_testcases
+    status_memory
+    status_runtime
     answerDescription
-    output
     comments {
       ...CommentDetails
     }
@@ -53,7 +59,6 @@ export const QUESTION_DETAILS = gql`
       ...AuthorDetails
     }
     title
-    body
     tags
     points
     views
@@ -71,18 +76,8 @@ export const QUESTION_DETAILS = gql`
     url
     start_time
     end_time
-    question_preview
+    slug
     team
-    languages {
-      name
-      default_code
-      eval_function
-      answer_cases {
-        arr
-        target
-        expected
-      }
-    }
   }
   ${COMMENT_DETAILS}
   ${AUTHOR_DETAILS}

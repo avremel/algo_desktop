@@ -6,6 +6,8 @@ import { Link as RouterLink } from "react-router-dom";
 import LoadingSpinner from "./LoadingSpinner";
 import { useStateContext } from "../context/state";
 import { getErrorMsg } from "../utils/helperFuncs";
+import { useAuthContext } from "../context/auth";
+import { useHistory } from "react-router-dom";
 
 import {
   Typography,
@@ -15,9 +17,11 @@ import {
   Grid,
 } from "@material-ui/core";
 import { useTheme } from "@material-ui/core/styles";
-import { useRightSidePanelStyles } from "../styles/muiStyles";
 
-const QuesSidePanel = ({ answersAuthorsArray, end_time }) => {
+const QuesSidePanel = ({ id, title, answersAuthorsArray, end_time, slug }) => {
+  const { user } = useAuthContext();
+  const history = useHistory();
+
   function calculateTimeLeft() {
     let diff = moment(end_time).diff(moment());
     if (diff <= 0) {
@@ -41,22 +45,18 @@ const QuesSidePanel = ({ answersAuthorsArray, end_time }) => {
 
   let countdown;
   if (timeLeft) {
-    countdown = `Time left: ${timeLeft?.days()}D ${timeLeft?.hours()}h ${timeLeft?.minutes()}m ${timeLeft?.seconds()}s`;
+    countdown = `${title} - ${timeLeft?.days()}D ${timeLeft?.hours()}h ${timeLeft?.minutes()}m ${timeLeft?.seconds()}s`;
   } else {
     // AUg 4th 8:30pm
-    countdown = `Ended: ${moment(end_time).format("MMM Do h:mm a")}`;
+    countdown = `${title} - Ended: ${moment(end_time).format("MMM Do h:mm a")}`;
   }
-  const classes = useRightSidePanelStyles();
   const { notify } = useStateContext();
   const theme = useTheme();
-  const isNotDesktop = useMediaQuery(theme.breakpoints.down("sm"));
   const { data, loading } = useQuery(GET_ALL_USERS, {
     onError: (err) => {
       notify(getErrorMsg(err), "error");
     },
   });
-
-  if (isNotDesktop) return null;
 
   const squareSize = 15; // Adjust to control the size of the squares
   const squareMargin = 1; // Adjust to control the space between squares
@@ -80,42 +80,50 @@ const QuesSidePanel = ({ answersAuthorsArray, end_time }) => {
 
   return (
     <Grid item>
-      <div className={classes.rootPanel}>
-        <div className={classes.content}>
-          <div className={classes.progressColumn}>
-            <Typography
-              variant="h6"
-              color={
-                timeLeft && timeLeft?.asHours() < 1 ? "error" : "secondary"
-              }
-            >
-              {countdown}
-            </Typography>
-            {!loading && data ? (
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                {data.getAllUsers.map(
-                  (u) =>
-                    u.id !== "64d19aa1e71da54d5c7d2916" && (
-                      <Tooltip title={u.fullName} key={u.id}>
-                        <Paper
-                          style={{
-                            width: squareSize,
-                            height: squareSize,
-                            margin: squareMargin,
-                            backgroundColor: getAnswerCountColor(u.id),
-                          }}
-                        />
-                      </Tooltip>
-                    )
-                )}
-              </div>
-            ) : (
-              <div style={{ minWidth: "200px" }}>
-                <LoadingSpinner size={40} />
-              </div>
+      <div>
+        <Typography
+          variant="h6"
+          color={timeLeft && timeLeft?.asHours() < 1 ? "error" : "secondary"}
+          onClick={() => {
+            // if its a iframe then send message to parent window
+            if (window.parent !== window) {
+              console.log("iframe");
+              window.parent.location.href = `https://leetcode.com/problems/${slug}/`; // open in the parent tab
+            } else {
+              // if (answersAuthorsArray.includes(user.id)) {
+              //   history.push(`/questions/${id}`);
+              // } else {
+              window.open(`https://leetcode.com/problems/${slug}/`, "_blank");
+              // }
+            }
+          }}
+          style={{ cursor: "pointer" }}
+        >
+          {countdown}
+        </Typography>
+        {!loading && data ? (
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {data.getAllUsers.map(
+              (u) =>
+                u.id !== "64dcfc269667b01df4b8ee48" && (
+                  <Tooltip title={u.fullName} key={u.id}>
+                    <Paper
+                      style={{
+                        width: squareSize,
+                        height: squareSize,
+                        margin: squareMargin,
+                        backgroundColor: getAnswerCountColor(u.id),
+                      }}
+                    />
+                  </Tooltip>
+                )
             )}
           </div>
-        </div>
+        ) : (
+          <div style={{ minWidth: "200px" }}>
+            <LoadingSpinner size={40} />
+          </div>
+        )}
       </div>
     </Grid>
   );

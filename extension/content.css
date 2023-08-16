@@ -1,0 +1,32 @@
+#algoTeams-handlebar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#algoTeams-handlebar:hover {
+  background-color: rgb(0, 132, 255);
+}
+
+#algoTeams-handlebar:active {
+  background-color: rgb(0, 132, 255);
+}
+
+.handlebar-svg {
+  margin-bottom: 48px;
+  fill: gray;
+}
+
+#open-handlebar-svg {
+  transform: rotate(180deg);
+}
+
+#algoTeams-handlebar:hover > .handlebar-svg {
+  fill: white;
+}
+
+#algoTeams-handlebar:active > .handlebar-svg {
+  fill: white;
+}

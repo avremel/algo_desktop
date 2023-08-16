@@ -17,7 +17,7 @@ const DesktopNavMenu = () => {
   const { pathname } = useLocation();
   const classes = useMenuStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl"));
   const { user } = useAuthContext();
 
   if (isMobile) return null;
@@ -82,16 +82,16 @@ const DesktopNavMenu = () => {
             <WbIncandescentIcon className={classes.menuIcon} />
             Suggestions
           </MenuItem> */}
-          {user?.role === "ADMIN" && (
-            <MenuItem
-              selected={pathname.startsWith("/ask")}
-              component={RouterLink}
-              to="/ask"
-            >
-              <AddCircleOutlineIcon className={classes.menuIcon} />
-              Create a Question
-            </MenuItem>
-          )}
+          {/* {user?.role === "ADMIN" && ( */}
+          {/* <MenuItem
+            selected={pathname.startsWith("/ask")}
+            component={RouterLink}
+            to="/ask"
+          >
+            <AddCircleOutlineIcon className={classes.menuIcon} />
+            Create a Question
+          </MenuItem> */}
+          {/* )} */}
         </div>
         <Divider orientation="vertical" flexItem />
       </div>

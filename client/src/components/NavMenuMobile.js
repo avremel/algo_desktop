@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link as RouterLink } from "react-router-dom";
-
+import { useAuthContext } from "../context/auth";
 import {
   IconButton,
   Menu,
@@ -18,6 +18,8 @@ import PeopleIcon from "@material-ui/icons/People";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 
 const MobileNavMenu = () => {
+  const { user } = useAuthContext();
+  console.log("user", user);
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const classes = useMenuStyles();
@@ -80,8 +82,19 @@ const MobileNavMenu = () => {
           <PeopleIcon className={classes.menuIcon} />
           Users
         </MenuItem>
-        <Divider />
-        <div className={classes.madeByItem}>
+
+        {user.role === "ADMIN" && (
+          <MenuItem
+            selected={pathname.startsWith("/ask")}
+            component={RouterLink}
+            to="/ask"
+          >
+            {/* <AddCircleOutlineIcon className={classes.menuIcon} /> */}
+            Create a Question
+          </MenuItem>
+        )}
+        {/* <Divider /> */}
+        {/* <div className={classes.madeByItem}>
           <Typography variant="caption" color="secondary">
             Made with{" "}
             <FavoriteIcon style={{ fontSize: 10, color: "#f48225" }} /> by{" "}
@@ -94,7 +107,7 @@ const MobileNavMenu = () => {
               <strong>{` Dave Geretz`}</strong>
             </Link>
           </Typography>
-        </div>
+        </div> */}
       </Menu>
     </div>
   );

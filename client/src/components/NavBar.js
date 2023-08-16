@@ -18,6 +18,7 @@ import {
   Container,
   useMediaQuery,
   IconButton,
+  Grid,
 } from "@material-ui/core";
 import { useNavStyles } from "../styles/muiStyles";
 import { useTheme } from "@material-ui/core/styles";
@@ -30,7 +31,7 @@ const NavBar = () => {
   const client = useApolloClient();
   const classes = useNavStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("xl"));
 
   useEffect(() => {
     if (!isMobile && searchOpen) {
@@ -56,46 +57,25 @@ const NavBar = () => {
           <Container disableGutters className={classes.contentContainer}>
             <div className={classes.leftPortion}>
               <div className={classes.logoWrapper}>
-                {isMobile && <NavMenuMobile />}
-                {isMobile ? (
-                  <IconButton
-                    className={classes.logo}
-                    component={RouterLink}
-                    to="/"
-                  >
-                    <img src={SofLogo} width="25px" alt="sof-logo" />
-                  </IconButton>
-                ) : (
-                  <Button
-                    className={classes.logo}
-                    component={RouterLink}
-                    to="/"
-                    size="large"
-                  >
-                    <img
-                      src={SofLogo}
-                      width="115px"
-                      height="55px"
-                      alt="sof-logo"
-                      style={{ marginRight: "5px" }}
-                    />
-                  </Button>
-                )}
-                {/* {!isMobile && (
-                  <Typography variant="caption" color="secondary">
-                    Made with{" "}
-                    <FavoriteIcon style={{ fontSize: 10, color: "#f48225" }} />{" "}
-                    by
-                    <Link
-                      href={"https://www.linkedin.com/in/dave-geretz/"}
-                      color="inherit"
-                      target="_blank"
-                      rel="noopener"
+                <Grid container alignItems="center">
+                  <Grid item>{isMobile && <NavMenuMobile />}</Grid>
+                  <Grid item>
+                    <Button
+                      className={classes.logo}
+                      component={RouterLink}
+                      to="/"
+                      size="large"
                     >
-                      <strong>{` Dave Geretz`}</strong>
-                    </Link>
-                  </Typography>
-                )} */}
+                      <img
+                        src={SofLogo}
+                        width="115px"
+                        height="55px"
+                        alt="sof-logo"
+                        style={{ marginRight: "5px" }}
+                      />
+                    </Button>
+                  </Grid>
+                </Grid>
               </div>
               {!isMobile && <SearchBar />}
             </div>

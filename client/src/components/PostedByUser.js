@@ -21,7 +21,7 @@ const ByUser = ({
     >
       <Avatar
         src={
-          userId === "64d19aa1e71da54d5c7d2916"
+          userId === "64dcfc269667b01df4b8ee48"
             ? "https://avatars.slack-edge.com/2020-03-11/984159684801_4419b0808bf45a78380e_88.png"
             : `https://secure.gravatar.com/avatar/${userId}?s=164&d=identicon`
         }

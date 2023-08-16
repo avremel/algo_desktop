@@ -46,7 +46,6 @@ const QuesPageContent = ({ question, hasAnswered, setHasAnswered }) => {
     body,
     tags,
     author,
-    languages,
   } = question;
   const firaCodeStyle = { fontFamily: "'Fira Code', monospace" };
 
@@ -54,61 +53,7 @@ const QuesPageContent = ({ question, hasAnswered, setHasAnswered }) => {
   const { setEditValues, notify } = useStateContext();
   const history = useHistory();
   const classes = useQuesPageStyles();
-  const [outputDetails, setOutputDetails] = useState(null);
 
-  const getOutput = () => {
-    if (outputDetails === null) return [];
-
-    let output = [
-      "test twoSum",
-      "> building source...",
-      "> executing " + outputDetails?.length + " tests...",
-    ];
-
-    let failedCaseEncountered = false;
-
-    outputDetails?.forEach((detail, index) => {
-      if (!failedCaseEncountered) {
-        if (detail.consoles.length > 0) {
-          console.log("detail.consoles", detail.consoles);
-          detail.consoles.forEach((console, index) => {
-            output.push({
-              color: "#fff",
-              text: `> ${JSON.stringify(console[0])}`,
-            });
-          });
-        }
-        let isPassed = detail.isPassed
-          ? {
-              text: `test_${index} [PASS] `,
-              executionTime: `${detail.executionTime}ms`,
-              color: "#14fbdc",
-              msColor: "#6db1fe",
-            }
-          : {
-              text: `test_${index} [FAIL] `,
-              executionTime: `${detail.executionTime}ms`,
-              color: "#ffb76b",
-              msColor: "#6db1fe",
-            };
-        output.push(isPassed);
-
-        if (!detail.isPassed) {
-          failedCaseEncountered = true;
-          output.push({
-            color: "#ffb76b",
-            text: `├── expect: ${JSON.stringify(detail.expected)}`,
-          });
-          output.push({
-            color: "#ffb76b",
-            text: `└── actual: ${JSON.stringify(detail.output)}`,
-          });
-        }
-      }
-    });
-
-    return output;
-  };
   const [submitVote] = useMutation(VOTE_QUESTION, {
     onError: (err) => {
       notify(getErrorMsg(err), "error");
@@ -267,29 +212,8 @@ const QuesPageContent = ({ question, hasAnswered, setHasAnswered }) => {
       style={{ height: "85vh", overflowY: "auto", overflowX: "hidden" }}
     >
       <Grid container spacing={2}>
-        <Grid item xs={hasAnswered || user === null ? 12 : 5}>
-          {!hasAnswered && user !== null ? (
-            <div
-              style={{
-                height: "60vh",
-                overflowY: "auto",
-                overflowX: "hidden",
-              }}
-            >
-              <QuesAnsDetails
-                quesAns={question}
-                upvoteQuesAns={upvoteQues}
-                downvoteQuesAns={downvoteQues}
-                editQuesAns={editQues}
-                deleteQuesAns={deleteQues}
-                addComment={addQuesComment}
-                editComment={editQuesComment}
-                deleteComment={deleteQuesComment}
-                isMainQuestion={true}
-                hasAnswered={hasAnswered}
-              />
-            </div>
-          ) : (
+        <Grid item xs={12}>
+          <div>
             <QuesAnsDetails
               quesAns={question}
               upvoteQuesAns={upvoteQues}
@@ -302,51 +226,8 @@ const QuesPageContent = ({ question, hasAnswered, setHasAnswered }) => {
               isMainQuestion={true}
               hasAnswered={hasAnswered}
             />
-          )}
-          {!hasAnswered && user !== null && (
-            <Box
-              style={{
-                height: "25vh",
-                width: "100%",
-                backgroundColor: "#1d1e18",
-                color: "#999",
-                padding: 16,
-                overflowY: "scroll",
-              }}
-            >
-              {getOutput().map((line, index) =>
-                typeof line === "string" ? (
-                  <Typography
-                    key={index}
-                    style={{ ...firaCodeStyle, color: "#999" }}
-                  >
-                    {line}
-                  </Typography>
-                ) : (
-                  <div key={index}>
-                    <Typography
-                      style={{
-                        ...firaCodeStyle,
-                        color: line.color,
-                        display: "inline",
-                      }}
-                    >
-                      {line.text}
-                    </Typography>
-                    <Typography
-                      style={{
-                        ...firaCodeStyle,
-                        color: line.msColor,
-                        display: "inline",
-                      }}
-                    >
-                      {line.executionTime}
-                    </Typography>
-                  </div>
-                )
-              )}
-            </Box>
-          )}
+          </div>
+
           {(hasAnswered || user === null) && (
             <>
               <Divider />
@@ -380,15 +261,7 @@ const QuesPageContent = ({ question, hasAnswered, setHasAnswered }) => {
         </Grid>
 
         {!hasAnswered && user !== null && (
-          <Grid item xs={7}>
-            <AnswerForm
-              quesId={quesId}
-              tags={tags}
-              languages={languages}
-              setOutputDetails={setOutputDetails}
-              outputDetails={outputDetails}
-            />
-          </Grid>
+          <AnswerForm quesId={quesId} tags={tags} />
         )}
       </Grid>
     </div>

@@ -13,11 +13,17 @@ module.exports = {
       const {
         quesId,
         code,
-        language_id,
         theme,
         algo,
         answerDescription,
-        output,
+        lang,
+        memory,
+        memory_percentile,
+        runtime_percentile,
+        total_correct,
+        total_testcases,
+        status_memory,
+        status_runtime,
       } = args;
 
       try {
@@ -28,16 +34,21 @@ module.exports = {
             `Question with ID: ${quesId} does not exist in DB.`
           );
         }
-        console.log(`Language ID: ${language_id}`);
         console.log(`Theme: ${theme}`);
         question.answers.push({
           code,
-          language_id,
           theme,
           author: author._id,
           algo,
           answerDescription,
-          output,
+          lang,
+          memory,
+          memory_percentile,
+          runtime_percentile,
+          total_correct,
+          total_testcases,
+          status_memory,
+          status_runtime,
         });
         const savedQues = await question.save();
         const populatedQues = await savedQues
@@ -100,11 +111,17 @@ module.exports = {
         quesId,
         ansId,
         code,
-        language_id,
         theme,
         algo,
         answerDescription,
-        output,
+        lang,
+        memory,
+        memory_percentile,
+        runtime_percentile,
+        total_correct,
+        total_testcases,
+        status_memory,
+        status_runtime,
       } = args;
 
       try {
@@ -132,9 +149,31 @@ module.exports = {
         if (code !== undefined) {
           targetAnswer.code = code;
         }
-        if (language_id !== undefined) {
-          targetAnswer.language_id = language_id;
+        if (lang !== undefined) {
+          targetAnswer.lang = lang;
         }
+        if (memory !== undefined) {
+          targetAnswer.memory = memory;
+        }
+        if (memory_percentile !== undefined) {
+          targetAnswer.memory_percentile = memory_percentile;
+        }
+        if (runtime_percentile !== undefined) {
+          targetAnswer.runtime_percentile = runtime_percentile;
+        }
+        if (total_correct !== undefined) {
+          targetAnswer.total_correct = total_correct;
+        }
+        if (total_testcases !== undefined) {
+          targetAnswer.total_testcases = total_testcases;
+        }
+        if (status_memory !== undefined) {
+          targetAnswer.status_memory = status_memory;
+        }
+        if (status_runtime !== undefined) {
+          targetAnswer.status_runtime = status_runtime;
+        }
+
         if (theme !== undefined) {
           targetAnswer.theme = theme;
         }
@@ -143,9 +182,6 @@ module.exports = {
         }
         if (answerDescription !== undefined) {
           targetAnswer.answerDescription = answerDescription;
-        }
-        if (output !== undefined) {
-          targetAnswer.output = output;
         }
 
         targetAnswer.updatedAt = Date.now();

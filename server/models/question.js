@@ -3,19 +3,6 @@ const commentSchema = require("./comment").schema;
 const answerSchema = require("./answer").schema;
 const schemaCleaner = require("../utils/schemaCleaner");
 
-const answerCaseSchema = new mongoose.Schema({
-  arr: String,
-  target: String,
-  expected: String,
-});
-
-const languageSchema = new mongoose.Schema({
-  name: String,
-  default_code: String,
-  eval_function: String,
-  answer_cases: [answerCaseSchema],
-});
-
 const questionSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
@@ -27,29 +14,24 @@ const questionSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  body: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   url: {
     type: String,
   },
-  question_preview: {
+  slug: {
     type: String,
   },
   answersAuthorsArray: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   start_time: {
-    type: String,
+    type: Date,
+    required: true,
   },
   end_time: {
-    type: String,
+    type: Date,
   },
   team: {
     type: String,
   },
   tags: [{ type: String, required: true, trim: true }],
-  languages: [languageSchema],
   comments: [commentSchema],
   answers: [answerSchema],
   points: {

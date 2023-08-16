@@ -31,14 +31,17 @@ const AskQuestionPage = () => {
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState(editValues ? editValues.tags : []);
   const [title, setTitle] = useState(editValues ? editValues.title : "");
-  const [body, setBody] = useState(editValues ? editValues.body : "");
+  const [slug, setSlug] = useState(editValues ? editValues.slug : "");
+  const [url, setUrl] = useState(editValues ? editValues.url : "");
+  const [team, setTeam] = useState(editValues ? editValues.team : "frum_devs");
+  const [startTime, setStartTime] = useState(
+    editValues ? editValues.start_time : ""
+  );
+  const [endTime, setEndTime] = useState(editValues ? editValues.end_time : "");
+
   const [tagsOptions, setTagsOptions] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const { register, handleSubmit, reset, errors } = useForm({
-    // defaultValues: {
-    //   title: editValues ? editValues.title : "",
-    //   body: editValues ? editValues.body : "",
-    // },
     mode: "onChange",
   });
 
@@ -73,7 +76,21 @@ const AskQuestionPage = () => {
       },
     }
   );
+  const formatDateTimeForBackend = (dateTimeStr) => {
+    const dateObj = new Date(dateTimeStr);
+    return dateObj.toISOString();
+  };
 
+  const convertToEmbedURL = (url) => {
+    // Use a regular expression to match various YouTube URL formats
+    const regex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?([\w\-]{10,12}).*/;
+    const match = url.match(regex);
+
+    return match && match[1]
+      ? `https://www.youtube.com/embed/${match[1]}`
+      : null;
+  };
   const postQuestion = async () => {
     if (tags.length === 0)
       return setErrorMsg("At least one tag must be added.");
@@ -82,149 +99,13 @@ const AskQuestionPage = () => {
 
     let response = await addQuestion({
       variables: {
-        title: "Two Sum",
-        question_preview:
-          "Given an array of integers, return indices of the two numbers such that they add up to a specific target.",
-        body: ` <div><p>Provided with an integer list <code>arr</code> and a separate integer <code>sum</code>, identify and return <em>the indices of two distinct numbers that together yield <code>sum</code></em>.</p>
-        <p>It is assumed that every input will have <strong><em>just one unique solution</em></strong>, and the <em>identical</em> element should not be utilized twice.</p>
-        <p>The solution can be given in any sequence.</p>
-        <p>&nbsp;</p>
-        <p><strong class="example">Example 1:</strong></p>
-        <pre><strong>Input:</strong> arr = [1,9,10,16], sum = 11
-        <strong>Output:</strong> [0,2]
-        <strong>Explanation:</strong> As arr[0] + arr[2] == 11, we return [0, 2].
-        </pre>
-        <p><strong class="example">Example 2:</strong></p>
-        <pre><strong>Input:</strong> arr = [4,1,5], sum = 6
-        <strong>Output:</strong> [1,2]
-        </pre>
-        <p><strong class="example">Example 3:</strong></p>
-        <pre><strong>Input:</strong> arr = [2,2], sum = 4
-        <strong>Output:</strong> [0,1]
-        </pre>
-        <p>&nbsp;</p>
-        <p><strong>Constraints:</strong></p>
-        <ul>
-          <li><code>2 &lt;= arr.length &lt;= 10<sup>4</sup></code></li>
-          <li><code>-10<sup>9</sup> &lt;= arr[i] &lt;= 10<sup>9</sup></code></li>
-          <li><code>-10<sup>9</sup> &lt;= sum &lt;= 10<sup>9</sup></code></li>
-          <li><strong>There exists one unique solution.</strong></li>
-        </ul>
-        <p>&nbsp;</p>
-        <strong>Additional Question:&nbsp;</strong>Are you capable of developing an algorithm with a time complexity less than <code>O(n<sup>2</sup>)&nbsp;</code>?</div>`,
+        title,
+        slug,
         tags: tagArray,
-        url: "https://www.youtube.com/embed/KLlXCFG5TnA",
-        team: "frum_devs",
-        start_time: new Date(),
-        //48 hours from now
-        end_time: new Date(Date.now() + 48 * 60 * 60 * 1000),
-        languages: [
-          {
-            name: "javascript",
-            default_code: `/**
-            * @param {number[]} arr
-            * @param {number} target
-            * @return {number[]}
-            */
-            var twoSum = function(arr, target) {
-                
-            };`,
-            eval_function: `  function runTests(testCases) {
-              let passed = 0;
-              let total = testCases.length;
-              let outputCases = [];
-          
-              let originalConsoleLog = console.log; // Store original console.log function
-          
-              testCases.forEach((tc, index) => {
-                  let consoles = []; // Array to hold console.log messages for this test case
-                  console.log = function(...args) { // Override console.log
-                    consoles.push(args); // Append arguments to consoles array
-                  };
-          
-                  let arr = JSON.parse(tc.arr);
-                  let target = JSON.parse(tc.target);
-                  let expected = JSON.parse(tc.expected);
-          
-                  let result;
-                  let isPassed;
-                  let startTime = new Date().getTime(); // Capture start time
-                  try {
-                      result = twoSum(arr, target);
-                      isPassed = JSON.stringify(result) === JSON.stringify(expected);
-                      if (isPassed) {
-                          passed++;
-                      }
-                  } catch (e) {
-                      result = e.toString();
-                      isPassed = false;
-                  }
-                  let endTime = new Date().getTime(); // Capture end time
-          
-                  let executionTime = endTime - startTime; // Calculate execution time
-          
-                  outputCases.push({index, arr, target, expected, output: result, isPassed, executionTime, consoles});
-              });
-          
-              console.log = originalConsoleLog; // Restore original console.log
-          
-              return { passed, total, outputCases };
-            } `,
-
-            answer_cases: [
-              {
-                arr: "[2, 7, 11, 15]",
-                target: "9",
-                expected: "[0, 1]",
-              },
-              {
-                arr: "[3, 2, 4]",
-                target: "6",
-                expected: "[1, 2]",
-              },
-              {
-                arr: "[3, 3]",
-                target: "6",
-                expected: "[0, 1]",
-              },
-              {
-                arr: "[0, 4, 3, 0]",
-                target: "0",
-                expected: "[0, 3]",
-              },
-              {
-                arr: "[-1, -2, -3, -4, -5]",
-                target: "-8",
-                expected: "[2, 4]",
-              },
-              {
-                arr: "[1, 3, 4, 2]",
-                target: "6",
-                expected: "[2, 3]",
-              },
-              {
-                arr: "[1, 6, 4, 2]",
-                target: "3",
-                expected: "[0, 3]",
-              },
-              {
-                arr: "[3, 5]",
-                target: "8",
-                expected: "[0, 1]",
-              },
-              {
-                arr: "[3, 2, 4, 2]",
-                target: "4",
-                expected: "[1, 3]",
-              },
-              {
-                arr: "[1, 2, 3, 4, 5, 6, 7, 8, 9]",
-                target: "17",
-                expected: "[7, 8]",
-              },
-            ],
-          },
-        ],
+        url: convertToEmbedURL(url),
+        team,
+        start_time: formatDateTimeForBackend(startTime),
+        end_time: formatDateTimeForBackend(endTime),
       },
       update: (_, { data }) => {
         history.push(`/questions/${data.postQuestion.id}`);
@@ -232,37 +113,6 @@ const AskQuestionPage = () => {
         notify("Question posted!");
       },
     });
-    // console.log(response.data.postQuestion.default_code);
-    // let quesId = await response.data.postQuestion.id;
-
-    // addAnswer({
-    //   variables: {
-    //     quesId,
-    //     body: response.data.postQuestion.default_code,
-    //     ai: "davinci",
-    //   },
-    //   update: (proxy, { data }) => {
-    //     reset();
-
-    //     const dataInCache = proxy.readQuery({
-    //       query: VIEW_QUESTION,
-    //       variables: { quesId },
-    //     });
-
-    //     const updatedData = {
-    //       ...dataInCache.viewQuestion,
-    //       answers: data.postAnswer,
-    //     };
-
-    //     proxy.writeQuery({
-    //       query: VIEW_QUESTION,
-    //       variables: { quesId },
-    //       data: { viewQuestion: updatedData },
-    //     });
-
-    //     notify("Answer submitted!");
-    //   },
-    // });
   };
 
   const editQuestion = ({ title, body }) => {
@@ -297,84 +147,7 @@ const AskQuestionPage = () => {
       setTagInput("");
     }
   };
-  const getTags = async () => {
-    console.log("getTags");
-    setTags(["array", "string", "math"]);
-    const response = await axios("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer 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`,
-      },
-      data: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content: `Given the following problem:
-  
-          Title: ${title}
-          Body: ${body}
-          Tags: ${tags}
-        
-           Please generate a similar but distinct problem by rewriting the title, body, and generating new appropriate tags.
-           Please ensure that the new problem does not deviate too much from the original one, as the solution video for the original problem should also be applicable to the new problem but understood by all.
-           The new title should consist of at mst four words. Tags should be one word or, if multiple words are necessary, they should be connected with underscores instead of spaces.
 
-
-
-  Format the response as follows:
-
-        
-          {{
-          "title": "{rewrite_title}",
-          "body": "{rewrite_body}",
-          "tags": "{rewrite_tags}"
-          }} `,
-          },
-        ],
-        model: "gpt-4",
-        max_tokens: 1000,
-        temperature: 0.6,
-      }),
-    });
-
-    if (response.status >= 200 && response.status < 300) {
-      console.log(response);
-      const text = response.data.choices[0].message.content.trim();
-      if (text.startsWith("{") && text.endsWith("}")) {
-        // Escape control characters
-        let jsonString = text
-          .replace(/\n/g, "\\n")
-          .replace(/\r/g, "\\r")
-          .replace(/\t/g, "\\t");
-
-        let parsedObject;
-        try {
-          parsedObject = JSON.parse(jsonString);
-        } catch (e) {
-          console.error(e);
-        }
-
-        // Now you can access the properties of the object
-        if (parsedObject) {
-          console.log(parsedObject.title);
-          setTitle(parsedObject.title);
-          setBody(
-            parsedObject.body
-              .replace(/\\n/g, "\n")
-              .replace(/\\r/g, "\r")
-              .replace(/\\t/g, "\t")
-          );
-          setTags(parsedObject.tags).split(",");
-        } else {
-          console.log("parsedObject is null");
-        }
-      } else {
-        console.log("text does not start with { and end with }");
-        console.log(text);
-      }
-    }
-  };
   return (
     <div className={classes.root}>
       <Typography variant="h5" color="secondary">
@@ -387,9 +160,6 @@ const AskQuestionPage = () => {
         }
       >
         <div className={classes.inputWrapper}>
-          <Typography variant="caption" color="secondary">
-            A simple and to-the-point title works best
-          </Typography>
           <TextField
             required
             fullWidth
@@ -404,36 +174,79 @@ const AskQuestionPage = () => {
             error={"title" in errors}
             helperText={"title" in errors ? errors.title.message : ""}
             className={classes.inputField}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <div></div>
-                </InputAdornment>
-              ),
-            }}
           />
         </div>
         <div className={classes.inputWrapper}>
-          <Typography variant="caption" color="secondary">
-            Include all the information someone would need to answer your
-            question
-          </Typography>
           <TextField
             required
-            multiline
-            rows={5}
             fullWidth
-            onChange={(e) => setBody(e.target.value)}
-            value={body}
-            name="body"
-            placeholder="Question body"
+            onChange={(e) => setSlug(e.target.value)}
+            value={slug}
+            name="slug"
+            placeholder="Question slug"
             type="text"
-            label="Body"
+            label="Slug"
             variant="outlined"
             size="small"
-            error={"body" in errors}
-            helperText={"body" in errors ? errors.body.message : ""}
             className={classes.inputField}
+          />
+        </div>
+        <div className={classes.inputWrapper}>
+          <TextField
+            required
+            fullWidth
+            onChange={(e) => setUrl(e.target.value)}
+            value={url}
+            name="url"
+            placeholder="video url"
+            type="text"
+            label="video Url"
+            variant="outlined"
+            size="small"
+            className={classes.inputField}
+          />
+        </div>
+        <div className={classes.inputWrapper}>
+          <TextField
+            required
+            fullWidth
+            onChange={(e) => setTeam(e.target.value)}
+            value={team}
+            name="team"
+            placeholder="team"
+            type="text"
+            label="team"
+            variant="outlined"
+            size="small"
+            className={classes.inputField}
+          />
+        </div>
+        {/* Start Time */}
+        <div className={classes.inputWrapper}>
+          <TextField
+            required
+            onChange={(e) => setStartTime(e.target.value)}
+            value={startTime}
+            name="start_time"
+            label="Start Time"
+            type="datetime-local"
+            variant="outlined"
+            size="small"
+            className={classes.inputField}
+            InputLabelProps={{ shrink: true }}
+          />
+
+          <TextField
+            required
+            onChange={(e) => setEndTime(e.target.value)}
+            value={endTime}
+            name="end_time"
+            label="End Time"
+            type="datetime-local"
+            variant="outlined"
+            size="small"
+            className={classes.inputField}
+            InputLabelProps={{ shrink: true }}
           />
         </div>
         <div className={classes.inputWrapper}>
@@ -477,9 +290,6 @@ const AskQuestionPage = () => {
               ))
             }
           />
-          <IconButton aria-label="get-tags" onClick={getTags}>
-            🤖
-          </IconButton>
         </div>
         <Button
           type="submit"

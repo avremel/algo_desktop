@@ -37,25 +37,21 @@ export const LOGIN_USER = gql`
 export const POST_QUESTION = gql`
   mutation addQuestion(
     $title: String!
-    $body: String!
     $url: String
-    $start_time: String
-    $end_time: String
-    $question_preview: String
+    $start_time: DateTime
+    $end_time: DateTime
+    $slug: String
     $team: String
     $tags: [String!]!
-    $languages: [LanguageInput!]!
   ) {
     postQuestion(
       title: $title
-      body: $body
       url: $url
       start_time: $start_time
       end_time: $end_time
-      question_preview: $question_preview
+      slug: $slug
       team: $team
       tags: $tags
-      languages: $languages
     ) {
       ...QuestionDetails
     }
@@ -66,26 +62,22 @@ export const EDIT_QUESTION = gql`
   mutation updateQuestion(
     $quesId: ID!
     $title: String!
-    $body: String!
     $url: String
-    $start_time: String
-    $end_time: String
-    $question_preview: String
+    $start_time: DateTime
+    $end_time: DateTime
+    $slug: String
     $team: String
     $tags: [String!]!
-    $languages: JSON!
   ) {
     editQuestion(
       quesId: $quesId
       title: $title
-      body: $body
       url: $url
       start_time: $start_time
       end_time: $end_time
-      question_preview: $question_preview
+      slug: $slug
       team: $team
       tags: $tags
-      languages: $languages
     ) {
       ...QuestionDetails
     }
@@ -140,18 +132,30 @@ export const POST_ANSWER = gql`
     $algo: String
     $answerDescription: String
     $code: String
-    $language_id: Int
-    $output: String
     $theme: String
+    $lang: String
+    $memory: Int
+    $memory_percentile: Float
+    $runtime_percentile: Float
+    $total_correct: Int
+    $total_testcases: Int
+    $status_memory: String
+    $status_runtime: String
   ) {
     postAnswer(
       quesId: $quesId
       algo: $algo
       answerDescription: $answerDescription
       code: $code
-      language_id: $language_id
-      output: $output
       theme: $theme
+      lang: $lang
+      memory: $memory
+      memory_percentile: $memory_percentile
+      runtime_percentile: $runtime_percentile
+      total_correct: $total_correct
+      total_testcases: $total_testcases
+      status_memory: $status_memory
+      status_runtime: $status_runtime
     ) {
       ...AnswerDetails
     }
@@ -166,9 +170,15 @@ export const EDIT_ANSWER = gql`
     $algo: String
     $answerDescription: String
     $code: String
-    $language_id: Int
-    $output: String
     $theme: String
+    $lang: String
+    $memory: Int
+    $memory_percentile: Float
+    $runtime_percentile: Float
+    $total_correct: Int
+    $total_testcases: Int
+    $status_memory: String
+    $status_runtime: String
   ) {
     editAnswer(
       quesId: $quesId
@@ -176,9 +186,15 @@ export const EDIT_ANSWER = gql`
       algo: $algo
       answerDescription: $answerDescription
       code: $code
-      language_id: $language_id
-      output: $output
       theme: $theme
+      lang: $lang
+      memory: $memory
+      memory_percentile: $memory_percentile
+      runtime_percentile: $runtime_percentile
+      total_correct: $total_correct
+      total_testcases: $total_testcases
+      status_memory: $status_memory
+      status_runtime: $status_runtime
     ) {
       ...AnswerDetails
     }

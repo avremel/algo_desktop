@@ -449,7 +449,7 @@ export const useQuesPageStyles = makeStyles(
       alignItems: "center",
     },
     quesBody: {
-      padding: "0.6em 1em",
+      padding: "0em 1em",
       paddingBottom: 0,
       width: "100%",
       [theme.breakpoints.down("xs")]: {
@@ -507,6 +507,9 @@ export const useQuesPageStyles = makeStyles(
     checkedAcceptIcon: {
       color: "#2e8b57",
       fontSize: 32,
+    },
+    answerSubmittedIcon: {
+      fontSize: 24,
     },
     icon: {
       fontSize: 32,

@@ -23,6 +23,7 @@ import { useQuesPageStyles } from "../styles/muiStyles";
 import { useTheme } from "@material-ui/core/styles";
 
 const QuestionPage = () => {
+  console.log("QuestionPage");
   const { clearEdit, notify } = useStateContext();
   const { user } = useAuthContext();
   console.log({ user });
@@ -31,7 +32,7 @@ const QuestionPage = () => {
   const [hasAnswered, setHasAnswered] = useState(false);
   const classes = useQuesPageStyles();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [fetchQuestion, { data, loading }] = useLazyQuery(VIEW_QUESTION, {
     onError: (err) => {
       notify(getErrorMsg(err), "error");
@@ -39,7 +40,19 @@ const QuestionPage = () => {
   });
 
   useEffect(() => {
-    fetchQuestion({ variables: { quesId } });
+    const questionIdSchema = {
+      "contains-duplicate": "64dd3e88da095c74a41997ac",
+      "valid-anagram": "64dd3ff0da095c74a41997d9",
+      "two-sum": "64dcfc269667b01df4b8ee48",
+      "group-anagrams": "64dd4084da095c74a41997f1",
+      "top-k-frequent-elements": "64dd40e6da095c74a4199804",
+      "product-of-array-except-self": "64dd423cda095c74a4199825",
+    };
+
+    const lookupId = questionIdSchema[quesId] || quesId;
+
+    fetchQuestion({ variables: { quesId: lookupId } });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quesId]);
 
@@ -79,7 +92,7 @@ const QuestionPage = () => {
           </div>
           <div className={classes.quesInfo}>
             <Typography variant="caption" style={{ marginRight: 10 }}>
-              Asked <strong>{formatDateAgo(createdAt)} ago</strong>
+              <strong>{formatDateAgo(createdAt)} ago</strong>
             </Typography>
             {createdAt !== updatedAt && (
               <Typography variant="caption" style={{ marginRight: 10 }}>
@@ -92,13 +105,11 @@ const QuestionPage = () => {
           </div>
         </div>
         <Divider />
-        <Grid container direction="row" wrap="nowrap" justify="space-between">
-          <QuesPageContent
-            question={question}
-            hasAnswered={hasAnswered}
-            setHasAnswered={setHasAnswered}
-          />
-        </Grid>
+        <QuesPageContent
+          question={question}
+          hasAnswered={hasAnswered}
+          setHasAnswered={setHasAnswered}
+        />
       </div>
     </Container>
   ) : (
@@ -128,9 +139,7 @@ const QuestionPage = () => {
         </div>
       </div>
       <Divider />
-      <Grid container direction="row" wrap="nowrap" justify="space-between">
-        <QuesPageContent question={question} />
-      </Grid>
+      <QuesPageContent question={question} />
     </div>
   );
 };

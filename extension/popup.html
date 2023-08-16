@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>algoTeams</title>
+    <link rel="stylesheet" href="popup.css" />
+    <script defer src="popup.js"></script>
+  </head>
+  <body>
+    <div class="flex-col">
+      <h2>algoTeams</h2>
+      <div id="algoTeams-instructions">
+        <div id="algoTeams-instructions-text">
+          To use algoTeams, go to any LeetCode problem and refresh the page. You
+          must be using the new LeetCode UI. You should see the algoTeams side
+          panel on the right.
+        </div>
+        <div class="flex-col">
+          <div id="leetcode-link">Go to a LeetCode problem</div>
+        </div>
+      </div>
+      <div id="algoTeams-settings">
+        <div class="flex-row">
+          <label class="switch">
+            <input id="toggle-algoTeams-darkmode" type="checkbox" />
+            <span class="slider round"></span>
+          </label>
+          <span>Dark Mode</span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -15,6 +15,7 @@ const axios = require("axios");
 module.exports = {
   Query: {
     getQuestions: async (_, args) => {
+      const currentDate = new Date();
       const { sortBy, filterByTag, filterBySearch } = args;
       const page = Number(args.page);
       const limit = Number(args.limit);
@@ -37,11 +38,12 @@ module.exports = {
           sortQuery = { hotAlgo: -1 };
       }
 
-      let findQuery = {};
+      let findQuery = { start_time: { $lte: currentDate } };
       if (filterByTag) {
-        findQuery = { tags: { $all: [filterByTag] } };
+        findQuery = { ...findQuery, tags: { $all: [filterByTag] } };
       } else if (filterBySearch) {
         findQuery = {
+          ...findQuery,
           $or: [
             {
               title: {
@@ -49,12 +51,7 @@ module.exports = {
                 $options: "i",
               },
             },
-            {
-              body: {
-                $regex: filterBySearch,
-                $options: "i",
-              },
-            },
+            // ... other conditions if any
           ],
         };
       }
@@ -104,71 +101,10 @@ module.exports = {
     },
   },
   Mutation: {
-    // postQuestion: async (_, args, context) => {
-    //   const loggedUser = authChecker(context);
-    //   const { title, body, tags } = args;
-
-    //   const { errors, valid } = questionValidator(title, body, tags);
-    //   if (!valid) {
-    //     throw new UserInputError(Object.values(errors)[0], { errors });
-    //   }
-
-    //   try {
-    //     const author = await User.findById(loggedUser.id);
-    //     const newQuestion = new Question({
-    //       title,
-    //       body,
-    //       tags,
-    //       author: author._id,
-    //     });
-    //     const response = await axios("https://api.openai.com/v1/completions", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer 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`,
-    //       },
-    //       data: JSON.stringify({
-    //         prompt: `${title},
-    //         ${body}, ${tags.map((tag) => `${tag}, `).join("")}`,
-    //         model: "text-davinci-003",
-    //         max_tokens: 1000,
-    //       }),
-    //     });
-
-    //     if (response.status >= 200 && response.status < 300) {
-    //       console.log(response);
-    //       const savedQues = await newQuestion.save();
-    //       let populatedQues = await savedQues
-    //         .populate("author", "username fullName")
-    //         .execPopulate();
-    //       populatedQues.set("default_code", response.data.choices[0].text);
-    //       await populatedQues.save();
-
-    //       author.questions.push({ quesId: savedQues._id });
-    //       await author.save();
-    //       return populatedQues;
-    //     } else {
-    //       throw new Error(`Request failed: ${response.statusText}`);
-    //     }
-    //   } catch (err) {
-    //     throw new UserInputError(errorHandler(err));
-    //   }
-    // },
-
     postQuestion: async (_, args, context) => {
       const loggedUser = authChecker(context);
 
-      const {
-        title,
-        body,
-        tags,
-        start_time,
-        end_time,
-        languages,
-        team,
-        url,
-        question_preview,
-      } = args;
+      const { title, tags, start_time, end_time, team, url, slug } = args;
 
       const { errors, valid } = questionValidator(tags);
       if (!valid) {
@@ -179,14 +115,11 @@ module.exports = {
         const author = await User.findById(loggedUser.id);
         const newQuestion = new Question({
           title,
-          body,
           tags,
-          languages,
           author: author._id,
           start_time,
           end_time,
-          question_preview,
-          languages,
+          slug,
           team,
           url,
         });
@@ -230,16 +163,15 @@ module.exports = {
     },
     editQuestion: async (_, args, context) => {
       const loggedUser = authChecker(context);
-      const { quesId, title, body, tags } = args;
+      const { quesId, title, tags } = args;
 
-      const { errors, valid } = questionValidator(title, body, tags);
+      const { errors, valid } = questionValidator(title, tags);
       if (!valid) {
         throw new UserInputError(Object.values(errors)[0], { errors });
       }
 
       const updatedQuesObj = {
         title,
-        body,
         tags,
         updatedAt: Date.now(),
       };

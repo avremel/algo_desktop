@@ -10,9 +10,8 @@ import AcceptAnswerButton from "./AcceptAnswerButton";
 import DeleteDialog from "./DeleteDialog";
 import AuthFormModal from "./AuthFormModal";
 import { ReactComponent as AcceptedIcon } from "../svg/accepted.svg";
-
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import {
-  idToLanguage,
   languageToIcon,
   themes,
   langs,
@@ -21,6 +20,8 @@ import {
 } from "../constants/languageOptions";
 import {
   Typography,
+  CircularProgress,
+  LinearProgress,
   Chip,
   Divider,
   Button,
@@ -28,11 +29,8 @@ import {
   TextField,
   Grid,
   Box,
-  Menu,
-  MenuItem,
   Tooltip,
 } from "@material-ui/core";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { useQuesPageStyles } from "../styles/muiStyles";
 import ReactQuill from "react-quill";
 
@@ -65,32 +63,16 @@ const QuesAnsDetails = ({
     updatedAt,
     answerDescription,
     algo,
-    outputDetails,
-    output,
     theme,
-    language_id,
+    lang,
+    memory_percentile,
+    runtime_percentile,
+    total_correct,
+    total_testcases,
+    status_memory,
+    status_runtime,
   } = quesAns;
-  console.log({ quesAns });
-  const [parsedOutput, setParsedOutput] = useState(null);
-  useEffect(() => {
-    if (output) {
-      try {
-        // Check if output is a valid base64 string
-        if (atob(btoa(output)) === output) {
-          const atobed = atob(output);
-          const parsed = JSON.parse(atobed);
-          setParsedOutput(parsed); // Save the parsed output in the state
-        }
-      } catch (error) {
-        console.error("Failed to decode and parse output", error);
-      }
-    }
-  }, [output]);
-  useEffect(() => {
-    console.log({ parsedOutput });
-  }, [parsedOutput]);
 
-  const firaCodeStyle = { fontFamily: "'Fira Code', monospace" };
   // const lineHeight = 22 / 18;
   const lineHeight = 1;
   const fontSize = 18;
@@ -109,48 +91,6 @@ const QuesAnsDetails = ({
     }
   }, [quesAns.code]);
 
-  const getOutput = () => {
-    let output = [];
-
-    if (parsedOutput && parsedOutput.outputCases) {
-      parsedOutput.outputCases.forEach((detail, index) => {
-        let isPassed = detail.isPassed
-          ? {
-              text: `test_${index} [PASS] `,
-              executionTime: `${detail.executionTime}ms`,
-              color: "#14fbdc",
-              msColor: "#6db1fe",
-              arr: detail.arr,
-              target: detail.target,
-              tooltip: true,
-            }
-          : {
-              text: `test_${index} [FAIL] `,
-              executionTime: `${detail.executionTime}ms`,
-              color: "#ffb76b",
-              msColor: "#6db1fe",
-              arr: detail.arr,
-              target: detail.target,
-              tooltip: true,
-            };
-        output.push(isPassed);
-
-        if (!detail.isPassed) {
-          output.push({
-            color: "#ffb76b",
-            text: `├── expect: ${JSON.stringify(detail.expected)}`,
-            tooltip: false,
-          });
-          output.push({
-            color: "#ffb76b",
-            text: `└── actual: ${JSON.stringify(detail.output)}`,
-            tooltip: false,
-          });
-        }
-      });
-    }
-    return output;
-  };
   const classes = useQuesPageStyles();
   const { user } = useAuthContext();
   const [editAnsOpen, setEditAnsOpen] = useState(false);
@@ -161,23 +101,16 @@ const QuesAnsDetails = ({
   const [editedTheme, setEditedTheme] = useState("");
 
   useEffect(() => {
-    console.log("isAnswer", isAnswer);
     if (isAnswer) {
       setEditedAnswerBody(atob(quesAns?.code));
       setEditedAlgo(quesAns?.algo);
       setEditedAnswerDescription(quesAns?.answerDescription);
-      setEditedLanguage(idToLanguage(quesAns?.language_id));
       setEditedTheme(quesAns?.theme);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quesAns.code]);
 
-  const handleLangChange = (sl) => {
-    console.log("sl", sl);
-    setEditedLanguage(sl.value);
-  };
   function handleThemeChange(theme) {
-    console.log("theme", theme);
     setEditedTheme(theme.value);
   }
   const openEditInput = () => {
@@ -195,7 +128,6 @@ const QuesAnsDetails = ({
       id,
       editedAlgo,
       editedAnswerDescription,
-      languageToId(editedLanguage),
       editedTheme
     );
     closeEditInput();
@@ -203,64 +135,34 @@ const QuesAnsDetails = ({
 
   return (
     <div className={classes.quesAnsWrapper}>
-      <div className={classes.voteColumn}>
-        {user ? (
-          <UpvoteButton
-            checked={user ? upvotedBy.includes(user.id) : false}
-            user={user}
-            handleUpvote={upvoteQuesAns}
-          />
-        ) : (
-          <AuthFormModal buttonType="upvote" />
-        )}
-        <Typography variant="h6" color="secondary">
-          {points}
-        </Typography>
-        {user ? (
-          <DownvoteButton
-            checked={user ? downvotedBy.includes(user.id) : false}
-            user={user}
-            handleDownvote={downvoteQuesAns}
-          />
-        ) : (
-          <AuthFormModal buttonType="downvote" />
-        )}
-        {isAnswer && user && user.id === quesAuthor.id && (
-          <AcceptAnswerButton
-            checked={acceptedAnswer === id}
-            handleAcceptAns={acceptAnswer}
-          />
-        )}
-        {isAnswer &&
-          acceptedAnswer === id &&
-          (!user || user.id !== quesAuthor.id) && (
-            <SvgIcon className={classes.checkedAcceptIcon}>
-              <AcceptedIcon />
-            </SvgIcon>
+      {!isMainQuestion && (
+        <div className={classes.voteColumn}>
+          {user ? (
+            <UpvoteButton
+              checked={user ? upvotedBy.includes(user.id) : false}
+              user={user}
+              handleUpvote={upvoteQuesAns}
+            />
+          ) : (
+            <AuthFormModal buttonType="upvote" />
           )}
-      </div>
+          <Typography variant="h6" color="secondary">
+            {points}
+          </Typography>
+          {user ? (
+            <DownvoteButton
+              checked={user ? downvotedBy.includes(user.id) : false}
+              user={user}
+              handleDownvote={downvoteQuesAns}
+            />
+          ) : (
+            <AuthFormModal buttonType="downvote" />
+          )}
+        </div>
+      )}
       <div className={classes.quesBody}>
         {!editAnsOpen ? (
-          isMainQuestion ? (
-            <>
-              {quesAns?.url && !hasAnswered && (
-                <iframe
-                  title="video"
-                  width="100%"
-                  height="400"
-                  src={quesAns?.url}
-                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen="allowfullscreen"
-                ></iframe>
-              )}
-              <ReactQuill
-                value={body}
-                readOnly={true}
-                theme="snow"
-                modules={{ toolbar: false }}
-              />
-            </>
-          ) : (
+          !isMainQuestion && (
             <>
               <Grid
                 container
@@ -270,22 +172,81 @@ const QuesAnsDetails = ({
                 spacing={1}
               >
                 <Grid item>
-                  <SvgIcon className={classes.icon}>
-                    {scoreToMedal(parsedOutput?.passed, parsedOutput?.total)}
-                  </SvgIcon>
+                  <Tooltip
+                    title={`Passed ${total_correct} /${total_testcases} `}
+                  >
+                    <SvgIcon className={classes.icon}>
+                      {scoreToMedal(total_correct, total_testcases)}
+                    </SvgIcon>
+                  </Tooltip>
                 </Grid>
 
                 <Grid item>
-                  <SvgIcon className={classes.icon}>
-                    {languageToIcon(language_id)}
-                  </SvgIcon>
+                  <Tooltip title={lang}>
+                    <SvgIcon className={classes.icon}>
+                      {languageToIcon(lang)}
+                    </SvgIcon>
+                  </Tooltip>
                 </Grid>
+                <Tooltip title={`Memory ${status_memory}`}>
+                  <Box
+                    position="relative"
+                    display="inline-flex"
+                    style={{ marginLeft: 2 }}
+                  >
+                    <CircularProgress
+                      variant="determinate"
+                      value={runtime_percentile}
+                      color="secondary"
+                    />
+                    <Box
+                      top={0}
+                      left={0}
+                      bottom={0}
+                      right={0}
+                      position="absolute"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography
+                        variant="caption"
+                        component="div"
+                        color="textSecondary"
+                      >{`${Math.round(runtime_percentile)}%`}</Typography>
+                    </Box>
+                  </Box>
+                </Tooltip>
+                <Tooltip title={`Speed ${status_runtime}`}>
+                  <Box position="relative" display="inline-flex">
+                    <CircularProgress
+                      variant="determinate"
+                      value={memory_percentile}
+                    />
+                    <Box
+                      top={0}
+                      left={0}
+                      bottom={0}
+                      right={0}
+                      position="absolute"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography
+                        variant="caption"
+                        component="div"
+                        color="textSecondary"
+                      >{`${Math.round(memory_percentile)}%`}</Typography>
+                    </Box>
+                  </Box>
+                </Tooltip>
                 <Grid item>
                   <Chip label={algo} variant="outlined" />
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <Typography
                     variant="body1"
                     style={{ whiteSpace: "pre-wrap" }}
@@ -295,100 +256,15 @@ const QuesAnsDetails = ({
                 </Grid>
               </Grid>
               <Grid container direction="row">
-                <Grid item xs={8}>
-                  <AceEditor
-                    theme={theme}
-                    mode="javascript"
-                    value={atob(quesAns.code)}
-                    fontSize={fontSize}
-                    readOnly={true}
-                    width="100%"
-                    maxLines={50}
-                  />
-                </Grid>
-
-                <Grid item xs={4}>
-                  <Box
-                    style={{
-                      maxHeight: editorHeight,
-                      height: "100%",
-                      width: "100%",
-                      backgroundColor: "#1d1e18",
-                      color: "#999",
-                      padding: 16,
-                      overflowY: "scroll",
-                    }}
-                  >
-                    {getOutput().map((line, index) =>
-                      typeof line === "string" ? (
-                        <Typography
-                          key={index}
-                          style={{ ...firaCodeStyle, color: "#999" }}
-                        >
-                          {line}
-                        </Typography>
-                      ) : (
-                        <div key={index}>
-                          {line.tooltip ? (
-                            <HtmlTooltip
-                              title={
-                                <Box
-                                  style={{
-                                    ...firaCodeStyle,
-                                    fontSize: 14,
-                                    padding: 8,
-                                  }}
-                                >
-                                  <span style={{ color: "#6db1fe" }}>
-                                    twoSum
-                                  </span>
-                                  (
-                                  <span style={{ color: "#d9522d" }}>
-                                    {JSON.stringify(line.arr)}
-                                  </span>
-                                  ,
-                                  <span style={{ color: "#2d419f" }}>
-                                    {JSON.stringify(line.target)}
-                                  </span>
-                                  )
-                                </Box>
-                              }
-                            >
-                              <Typography
-                                style={{
-                                  ...firaCodeStyle,
-                                  color: line.color,
-                                  display: "inline",
-                                }}
-                              >
-                                {line.text}
-                              </Typography>
-                            </HtmlTooltip>
-                          ) : (
-                            <Typography
-                              style={{
-                                ...firaCodeStyle,
-                                color: line.color,
-                                display: "inline",
-                              }}
-                            >
-                              {line.text}
-                            </Typography>
-                          )}
-                          <Typography
-                            style={{
-                              ...firaCodeStyle,
-                              color: line.msColor,
-                              display: "inline",
-                            }}
-                          >
-                            {line.executionTime}
-                          </Typography>
-                        </div>
-                      )
-                    )}
-                  </Box>
-                </Grid>
+                <AceEditor
+                  theme={theme}
+                  mode="javascript"
+                  value={atob(quesAns.code)}
+                  fontSize={fontSize}
+                  readOnly={true}
+                  width="100%"
+                  maxLines={50}
+                />
               </Grid>
             </>
           )
@@ -402,30 +278,7 @@ const QuesAnsDetails = ({
               alignItems="center"
               spacing={3}
             >
-              <Grid item>
-                <Select
-                  placeholder={`Select Language`}
-                  options={langs}
-                  value={langs.find((obj) => obj.value === editedLanguage)}
-                  onChange={(e) => handleLangChange(e)}
-                />
-              </Grid>
-              <Grid item>
-                <Select
-                  placeholder={`Select Theme`}
-                  options={themes}
-                  value={themes.find((obj) => obj.value === editedTheme)}
-                  onChange={(e) => handleThemeChange(e)}
-                />
-              </Grid>
-            </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-start"
-              alignItems="center"
-            >
-              <Grid item xs={2}>
+              <Grid item xs={8}>
                 <Box width={1}>
                   <TextField
                     fullWidth
@@ -440,7 +293,23 @@ const QuesAnsDetails = ({
                   />
                 </Box>
               </Grid>
-              <Grid item xs={10}>
+              <Grid item xs={4}>
+                {" "}
+                <Select
+                  placeholder={`Select Theme`}
+                  options={themes}
+                  value={themes.find((obj) => obj.value === editedTheme)}
+                  onChange={(e) => handleThemeChange(e)}
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <Grid item xs={12}>
                 <Box width={1}>
                   <TextField
                     fullWidth
@@ -489,25 +358,9 @@ const QuesAnsDetails = ({
             </div>
           </form>
         )}
-        {tags && (
-          <div className={classes.tagsWrapper}>
-            {tags.map((t) => (
-              <Chip
-                key={t}
-                label={t}
-                variant="outlined"
-                color="primary"
-                size="small"
-                component={RouterLink}
-                to={`/tags/${t}`}
-                className={classes.tag}
-                clickable
-              />
-            ))}
-          </div>
-        )}
-        <div className={classes.bottomWrapper}>
-          {!editAnsOpen && (
+
+        <div className={!isMainQuestion && classes.bottomWrapper}>
+          {!editAnsOpen && !isMainQuestion && (
             <div className={classes.btnsWrapper}>
               {user && user.id === author.id && (
                 <Button
@@ -529,16 +382,28 @@ const QuesAnsDetails = ({
               )}
             </div>
           )}
-          <PostedByUser
-            username={author.username}
-            fullName={author.fullName}
-            userId={author.id}
-            createdAt={createdAt}
-            updatedAt={updatedAt}
-            filledVariant={true}
-            isAnswer={isAnswer}
-          />
+          {!isMainQuestion && (
+            <PostedByUser
+              username={author.username}
+              fullName={author.fullName}
+              userId={author.id}
+              createdAt={createdAt}
+              updatedAt={updatedAt}
+              filledVariant={true}
+              isAnswer={isAnswer}
+            />
+          )}
         </div>
+        {isMainQuestion && !hasAnswered && (
+          <iframe
+            title="video"
+            width="100%"
+            height="300"
+            src={quesAns?.url}
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen="allowfullscreen"
+          ></iframe>
+        )}
         <CommentSection
           user={user}
           comments={comments}
@@ -553,13 +418,3 @@ const QuesAnsDetails = ({
 };
 
 export default QuesAnsDetails;
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(12),
-    border: "1px solid #dadde9",
-  },
-}))(Tooltip);

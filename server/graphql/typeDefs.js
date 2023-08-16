@@ -92,53 +92,43 @@ module.exports = gql`
     createdAt: DateTime!
     updatedAt: DateTime!
     code: String
-    language_id: Int
     theme: String
     algo: String
     answerDescription: String
-    output: String
+    lang: String
+    memory: Int
+    memory_percentile: Float
+    runtime_percentile: Float
+    total_correct: Int
+    total_testcases: Int
+    status_memory: String
+    status_runtime: String
   }
 
   type QuestionList {
     id: ID!
     author: Author!
     title: String!
-    body: String!
     tags: [String!]!
     points: Int!
     views: Int!
     answers: [Answer]!
     answersAuthorsArray: [ID]!
-    question_preview: String
-    end_time: String
+    slug: String
+    end_time: DateTime
     team: String
     createdAt: DateTime!
     updatedAt: DateTime!
-  }
-
-  type AnswerCase {
-    arr: String!
-    target: String!
-    expected: String!
-  }
-
-  type ProgrammingLanguage {
-    name: String!
-    default_code: String!
-    eval_function: String!
-    answer_cases: [AnswerCase!]!
   }
 
   type Question {
     id: ID!
     author: Author!
     title: String!
-    body: String!
     tags: [String!]!
-    languages: [ProgrammingLanguage]
-    start_time: String
-    end_time: String
-    question_preview: String
+    start_time: DateTime
+    end_time: DateTime
+    slug: String
     team: String
     url: String
     points: Int!
@@ -193,43 +183,48 @@ module.exports = gql`
 
     postQuestion(
       title: String!
-      body: String!
       tags: [String!]!
       url: String
-      start_time: String
-      end_time: String
-      question_preview: String
+      start_time: DateTime
+      end_time: DateTime
+      slug: String
       team: String
-      languages: [LanguageInput]
     ): Question!
     deleteQuestion(quesId: ID!): ID!
-    editQuestion(
-      quesId: ID!
-      title: String!
-      body: String!
-      tags: [String!]!
-    ): Question!
+    editQuestion(quesId: ID!, title: String!, tags: [String!]!): Question!
     voteQuestion(quesId: ID!, voteType: VoteType!): Question!
 
     postAnswer(
       quesId: ID!
       code: String
-      language_id: Int
       theme: String
       algo: String
       answerDescription: String
-      output: String
+      lang: String
+      memory: Int
+      memory_percentile: Float
+      runtime_percentile: Float
+      total_correct: Int
+      total_testcases: Int
+      status_memory: String
+      status_runtime: String
     ): [Answer!]!
     deleteAnswer(quesId: ID!, ansId: ID!): ID!
     editAnswer(
       quesId: ID!
       ansId: ID!
       code: String
-      language_id: Int
       theme: String
       algo: String
       answerDescription: String
-      output: String
+      lang: String
+      memory: Int
+      memory_percentile: Float
+      runtime_percentile: Float
+      total_correct: Int
+      total_testcases: Int
+      status_memory: String
+      status_runtime: String
     ): [Answer!]!
     voteAnswer(quesId: ID!, ansId: ID!, voteType: VoteType!): Answer!
     acceptAnswer(quesId: ID!, ansId: ID!): Question!
@@ -246,18 +241,5 @@ module.exports = gql`
       commentId: ID!
       body: String!
     ): [Comment!]!
-  }
-
-  input AnswerCaseInput {
-    arr: String!
-    target: String!
-    expected: String!
-  }
-
-  input LanguageInput {
-    name: String!
-    default_code: String!
-    eval_function: String!
-    answer_cases: [AnswerCaseInput!]!
   }
 `;

@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.b12c95f0.css",
-    "main.js": "/static/js/main.dd76f430.js",
+    "main.css": "/static/css/main.68abf44c.css",
+    "main.js": "/static/js/main.88d809e9.js",
     "static/media/algo-teams.svg": "/static/media/algo-teams.b5308ea383811d3087243a335ec7e266.svg",
     "static/media/montserrat-latin-700italic.woff": "/static/media/montserrat-latin-700italic.6779372f04095051c62e.woff",
     "static/media/montserrat-latin-800italic.woff": "/static/media/montserrat-latin-800italic.fe82abb0bcede51bf724.woff",
@@ -39,22 +39,39 @@
     "static/media/montserrat-latin-200.woff2": "/static/media/montserrat-latin-200.9d266fbbfa6cab7009bd.woff2",
     "static/media/montserrat-latin-100italic.woff2": "/static/media/montserrat-latin-100italic.e279051046ba1286706a.woff2",
     "static/media/montserrat-latin-100.woff2": "/static/media/montserrat-latin-100.8d7d79679b70dbe27172.woff2",
+    "static/media/ruby.svg": "/static/media/ruby.afa71f3a0009d4f48e99d5b9fe499547.svg",
+    "static/media/rust.svg": "/static/media/rust.5d24aedb479bc1b8de9ffcc801d77364.svg",
     "static/media/404-error.svg": "/static/media/404-error.f711e1b3b554994efe7c5ca5c9359b99.svg",
+    "static/media/php.svg": "/static/media/php.5d23bf1f327ed670042b0ef63ed368e6.svg",
     "static/media/3rd-place-medal.svg": "/static/media/3rd-place-medal.b26925811109d026027b076b7efac342.svg",
+    "static/media/dart.svg": "/static/media/dart.700dbad07ecec45600db7a175b96d34a.svg",
     "static/media/2nd-place-medal.svg": "/static/media/2nd-place-medal.1fcd45bd41a4e4bdf202e8fcb478dd27.svg",
+    "static/media/erlang.svg": "/static/media/erlang.e5ecae484df524fe35b12718eb0a87ed.svg",
+    "static/media/java.svg": "/static/media/java.fc3d05e8bfdf0fa870a60f6558bd2ae5.svg",
+    "static/media/elixir.svg": "/static/media/elixir.f27a6ffd853ec9c7107af5420a1b7aa7.svg",
+    "static/media/golang.svg": "/static/media/golang.66d0b4fb080407c77db9d78ba9f583b9.svg",
     "static/media/1st-place-medal.svg": "/static/media/1st-place-medal.317967990e95c08ae133772267c87b47.svg",
     "static/media/python.svg": "/static/media/python.e795ee44508323884ace7fcea8fa118f.svg",
+    "static/media/python3.svg": "/static/media/python3.e795ee44508323884ace7fcea8fa118f.svg",
+    "static/media/cpp.svg": "/static/media/cpp.8f14a0293efa6eed5161bc3079d1efb7.svg",
+    "static/media/scala.svg": "/static/media/scala.6efc40e3cff606784dd1e2d35a7e7d16.svg",
+    "static/media/typescript.svg": "/static/media/typescript.d9d831bb8b9e61c33f4e996e4e0386bc.svg",
     "static/media/hand.svg": "/static/media/hand.0030f32907a25ba4110f50c2029d254b.svg",
+    "static/media/csharp.svg": "/static/media/csharp.480ebc5bac2ccb9f742688d8276d2d0f.svg",
+    "static/media/swift.svg": "/static/media/swift.5bde53693ca8bd71bb31c40eddcb2912.svg",
     "static/media/javascript.svg": "/static/media/javascript.43065f862e11b42f3c274031538dfef5.svg",
     "index.html": "/index.html",
     "static/media/accepted.svg": "/static/media/accepted.5b8cb0e6d24f8ca44ae0c6fa324006cb.svg",
+    "static/media/c.svg": "/static/media/c.070693d99e0c582203715d9b81ad5b7e.svg",
     "static/media/downvote.svg": "/static/media/downvote.c2e96646e7d66350df8e609ba5dc5a2d.svg",
     "static/media/upvote.svg": "/static/media/upvote.cac48af1f5085fdc71f28ca402cae2a3.svg",
-    "main.b12c95f0.css.map": "/static/css/main.b12c95f0.css.map",
-    "main.dd76f430.js.map": "/static/js/main.dd76f430.js.map"
+    "static/media/code.svg": "/static/media/code.e87219358931906567b676e0f57cc0d4.svg",
+    "static/media/kotlin.svg": "/static/media/kotlin.938ec0b2ee0b4bc3780e9ae6a8d03330.svg",
+    "main.68abf44c.css.map": "/static/css/main.68abf44c.css.map",
+    "main.88d809e9.js.map": "/static/js/main.88d809e9.js.map"
   },
   "entrypoints": [
-    "static/css/main.b12c95f0.css",
-    "static/js/main.dd76f430.js"
+    "static/css/main.68abf44c.css",
+    "static/js/main.88d809e9.js"
   ]
 }

@@ -39,7 +39,7 @@ const QuesListPage = ({ tagFilterActive, searchFilterActive }) => {
       variables: { sortBy, page, limit, filterByTag, filterBySearch },
     });
   };
-  console.log({ user });
+  // console.log({ user });
 
   useEffect(() => {
     getQues(sortBy, 1, 12, tagName, query);

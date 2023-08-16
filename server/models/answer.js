@@ -12,8 +12,33 @@ const answerSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  language_id: {
+
+  lang: {
+    type: String,
+    trim: true,
+  },
+  memory: {
     type: Number,
+  },
+  memory_percentile: {
+    type: Number,
+  },
+  runtime_percentile: {
+    type: Number,
+  },
+  total_correct: {
+    type: Number,
+  },
+  total_testcases: {
+    type: Number,
+  },
+  status_memory: {
+    type: String,
+    trim: true,
+  },
+  status_runtime: {
+    type: String,
+    trim: true,
   },
   theme: {
     type: String,
@@ -27,10 +52,7 @@ const answerSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  output: {
-    type: String,
-    trim: true,
-  },
+
   comments: [commentSchema],
   points: {
     type: Number,

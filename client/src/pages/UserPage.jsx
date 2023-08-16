@@ -58,7 +58,7 @@ const UserPage = () => {
       <div className={classes.userCard}>
         <Avatar
           src={
-            id === "64d19aa1e71da54d5c7d2916"
+            id === "64dcfc269667b01df4b8ee48"
               ? "https://avatars.slack-edge.com/2020-03-11/984159684801_4419b0808bf45a78380e_88.png"
               : `https://secure.gravatar.com/avatar/${id}?s=164&d=identicon`
           }

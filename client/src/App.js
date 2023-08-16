@@ -54,6 +54,13 @@ import "react-quill/dist/quill.snow.css";
 const App = () => {
   const { darkMode } = useStateContext();
   const classes = useBodyStyles();
+  // window.addEventListener(
+  //   "message",
+  //   (event) => {
+  //     console.log("incoming msg", event);
+  //   },
+  //   false
+  // );
 
   return (
     <ThemeProvider theme={customTheme(darkMode)}>

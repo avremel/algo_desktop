@@ -28,14 +28,13 @@ export const GET_QUESTIONS = gql`
           ...AuthorDetails
         }
         title
-        body
         tags
         points
         views
         createdAt
         updatedAt
         answersAuthorsArray
-        question_preview
+        slug
         end_time
         team
       }
@@ -52,7 +51,6 @@ export const VIEW_QUESTION = gql`
         ...AuthorDetails
       }
       title
-      body
       tags
       points
       views
@@ -70,18 +68,8 @@ export const VIEW_QUESTION = gql`
       url
       start_time
       end_time
-      question_preview
+      slug
       team
-      languages {
-        name
-        default_code
-        eval_function
-        answer_cases {
-          arr
-          target
-          expected
-        }
-      }
     }
   }
 
