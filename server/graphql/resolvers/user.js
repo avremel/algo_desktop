@@ -39,7 +39,7 @@ module.exports = {
         id: user._id,
         username: user.username,
         fullName: user.fullName,
-        role: user?.role,
+        role: user.role,
         questions: user.questions,
         answers: user.answers,
         createdAt: user.createdAt,
@@ -106,7 +106,7 @@ module.exports = {
         id: savedUser._id,
         username: savedUser.username,
         fullName: savedUser.fullName,
-        role: saveduser?.role,
+        role: savedUser.role,
         token,
       };
     },
