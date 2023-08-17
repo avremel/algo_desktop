@@ -62,7 +62,6 @@ const CodeEditorWindow = ({ onChange, code, setCode, quesId }) => {
 
   const postAnswer = async () => {
     const formattedCode = beautify.js(code);
-    console.log("acceptedSolution", acceptedSolution);
     addAnswer({
       variables: {
         quesId,

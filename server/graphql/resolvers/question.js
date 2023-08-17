@@ -150,7 +150,7 @@ module.exports = {
 
         if (
           question.author.toString() !== user._id.toString() &&
-          user.role !== "admin"
+          user?.role !== "admin"
         ) {
           throw new AuthenticationError("Access is denied.");
         }

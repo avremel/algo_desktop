@@ -374,7 +374,7 @@ const QuesAnsDetails = ({
                   Edit
                 </Button>
               )}
-              {user && (user.id === author.id || user.role === "ADMIN") && (
+              {user && (user.id === author.id || user?.role === "ADMIN") && (
                 <DeleteDialog
                   bodyType={isAnswer ? "answer" : "question"}
                   handleDelete={deleteQuesAns}

@@ -1,4 +1,4 @@
-const APP_URL = "http://localhost:3000/";
+const APP_URL = "https://www.algoteams.com/";
 const XIconSVG = `
 <svg xmlns="http://www.w3.org/2000/svg" class="xicon-svg" viewBox="0 0 24 24" width="18" height="18">
 <path
@@ -207,7 +207,6 @@ async function main() {
   mainContentContainer.insertAdjacentElement("afterend", handlebar);
   let submissionButtonTimer;
   async function handleClickSubmitCodeButton(submission) {
-    console.log("handleClickSubmitCodeButton", submission);
     clearInterval(submissionButtonTimer);
     let currentQuestionTitleSlug = getCurrentQuestionTitleSlug();
     if (!reactRoot.contentWindow || !currentQuestionTitleSlug) {
@@ -295,7 +294,6 @@ async function main() {
     }
   });
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("Message from 286:", message);
     if (message.key === "submission") {
       handleClickSubmitCodeButton(message.submission);
     }
@@ -304,7 +302,6 @@ async function main() {
     }
   });
 
-  console.log("323", currentQuestionTitleSlug);
   reactRoot.onload = () => {
     reactRoot.contentWindow.postMessage(
       {
@@ -318,7 +315,6 @@ async function main() {
 
   window.addEventListener("message", (event) => {
     if (event.data.type === "openLink") {
-      console.log("openLink", event.data);
       if (event.data.answered) {
         // window.location.href = `https://leetcode.com/problems/${event.data.question}/`;
         //post message to react app to open the question
@@ -335,7 +331,6 @@ async function main() {
       }
     }
   });
-  console.log("319 sent");
 }
 
 function waitForElement(selectors) {
@@ -358,7 +353,6 @@ function waitForElement(selectors) {
 }
 function getCurrentQuestionTitleSlug() {
   const currentUrl = window.location.href;
-  console.log("329 currentUrl", currentUrl);
   if (currentUrl.startsWith("https://leetcode.com/problems/")) {
     return currentUrl.split("/")[4];
   }

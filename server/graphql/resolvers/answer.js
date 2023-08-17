@@ -8,7 +8,6 @@ const { upvoteIt, downvoteIt, ansRep } = require("../../utils/helperFuncs");
 module.exports = {
   Mutation: {
     postAnswer: async (_, args, context) => {
-      console.log("postAnswer", args);
       const loggedUser = authChecker(context);
       const {
         quesId,
@@ -34,7 +33,6 @@ module.exports = {
             `Question with ID: ${quesId} does not exist in DB.`
           );
         }
-        console.log(`Theme: ${theme}`);
         question.answers.push({
           code,
           theme,
@@ -91,7 +89,7 @@ module.exports = {
 
         if (
           targetAnswer.author.toString() !== user._id.toString() &&
-          user.role !== "admin"
+          user?.role !== "admin"
         ) {
           throw new AuthenticationError("Access is denied.");
         }

@@ -23,10 +23,8 @@ import { useQuesPageStyles } from "../styles/muiStyles";
 import { useTheme } from "@material-ui/core/styles";
 
 const QuestionPage = () => {
-  console.log("QuestionPage");
   const { clearEdit, notify } = useStateContext();
   const { user } = useAuthContext();
-  console.log({ user });
   const { quesId } = useParams();
   const [question, setQuestion] = useState(null);
   const [hasAnswered, setHasAnswered] = useState(false);
@@ -43,10 +41,11 @@ const QuestionPage = () => {
     const questionIdSchema = {
       "contains-duplicate": "64dd3e88da095c74a41997ac",
       "valid-anagram": "64dd3ff0da095c74a41997d9",
-      "two-sum": "64dcfc269667b01df4b8ee48",
+      "two-sum": "64dd4025da095c74a41997e5",
       "group-anagrams": "64dd4084da095c74a41997f1",
       "top-k-frequent-elements": "64dd40e6da095c74a4199804",
       "product-of-array-except-self": "64dd423cda095c74a4199825",
+      "valid-sudoku": "64de1a1347d5248a450168f3",
     };
 
     const lookupId = questionIdSchema[quesId] || quesId;
@@ -58,7 +57,6 @@ const QuestionPage = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data.viewQuestion);
       setQuestion(data.viewQuestion);
       setHasAnswered(
         data.viewQuestion.answers.some((ans) => ans.author.id === user?.id) ||

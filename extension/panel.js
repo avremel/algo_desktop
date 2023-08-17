@@ -1,4 +1,4 @@
-const APP_URL = "http://localhost:3000/";
+const APP_URL = "https://www.algoteams.com/";
 const chevronIcon = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="chevron-icon-svg" width="28" height="28">
     <path

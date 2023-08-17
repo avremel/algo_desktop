@@ -55,12 +55,13 @@ const Comment = ({ comment, user, quesAnsId, editComment, deleteComment }) => {
               edit
             </Button>
           )}
-          {user && (user.id === comment.author.id || user.role === "ADMIN") && (
-            <DeleteDialog
-              bodyType="comment"
-              handleDelete={() => deleteComment(comment.id, quesAnsId)}
-            />
-          )}
+          {user &&
+            (user.id === comment.author.id || user?.role === "ADMIN") && (
+              <DeleteDialog
+                bodyType="comment"
+                handleDelete={() => deleteComment(comment.id, quesAnsId)}
+              />
+            )}
         </div>
       ) : (
         <form className={classes.smallForm} onSubmit={handleCommentEdit}>

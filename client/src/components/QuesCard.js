@@ -126,7 +126,6 @@ const QuesCard = ({ question }) => {
                 onClick={() => {
                   // if its a iframe then send message to parent window
                   if (window.parent !== window) {
-                    console.log("iframe");
                     window.parent.location.href = `https://leetcode.com/problems/${slug}/`; // open in the parent tab
                   } else {
                     // if (answersAuthorsArray.includes(user.id)) {

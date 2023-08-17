@@ -19,7 +19,6 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 
 const MobileNavMenu = () => {
   const { user } = useAuthContext();
-  console.log("user", user);
   const { pathname } = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const classes = useMenuStyles();
@@ -83,7 +82,7 @@ const MobileNavMenu = () => {
           Users
         </MenuItem>
 
-        {user.role === "ADMIN" && (
+        {user?.role === "ADMIN" && (
           <MenuItem
             selected={pathname.startsWith("/ask")}
             component={RouterLink}

@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.68abf44c.css",
-    "main.js": "/static/js/main.88d809e9.js",
+    "main.js": "/static/js/main.ca7f2f8e.js",
     "static/media/algo-teams.svg": "/static/media/algo-teams.b5308ea383811d3087243a335ec7e266.svg",
     "static/media/montserrat-latin-700italic.woff": "/static/media/montserrat-latin-700italic.6779372f04095051c62e.woff",
     "static/media/montserrat-latin-800italic.woff": "/static/media/montserrat-latin-800italic.fe82abb0bcede51bf724.woff",
@@ -68,10 +68,10 @@
     "static/media/code.svg": "/static/media/code.e87219358931906567b676e0f57cc0d4.svg",
     "static/media/kotlin.svg": "/static/media/kotlin.938ec0b2ee0b4bc3780e9ae6a8d03330.svg",
     "main.68abf44c.css.map": "/static/css/main.68abf44c.css.map",
-    "main.88d809e9.js.map": "/static/js/main.88d809e9.js.map"
+    "main.ca7f2f8e.js.map": "/static/js/main.ca7f2f8e.js.map"
   },
   "entrypoints": [
     "static/css/main.68abf44c.css",
-    "static/js/main.88d809e9.js"
+    "static/js/main.ca7f2f8e.js"
   ]
 }

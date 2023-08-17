@@ -64,7 +64,6 @@ const AskQuestionPage = () => {
   useEffect(() => {
     if (data) {
       setTagsOptions(data.getAllTags);
-      console.log(data.getAllTags);
     }
   }, [data]);
 
@@ -95,7 +94,6 @@ const AskQuestionPage = () => {
     if (tags.length === 0)
       return setErrorMsg("At least one tag must be added.");
     const tagArray = tags.map((tag) => (tag?.tagName ? tag.tagName : tag));
-    console.log("postQuestion", tagArray);
 
     let response = await addQuestion({
       variables: {
@@ -262,8 +260,6 @@ const AskQuestionPage = () => {
             inputValue={tagInput}
             onInputChange={(e, value) => handleTags(e, value)}
             onChange={(e, value, reason) => {
-              console.log("setting 349", value);
-
               setTags(value?.tagname || value);
             }}
             renderInput={(params) => (

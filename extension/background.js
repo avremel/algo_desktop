@@ -38,7 +38,6 @@ chrome.webRequest.onBeforeRequest.addListener(
     const match = details.url.match(/\/submissions\/detail\/(\d+)\/check\//);
     if (match && match[1]) {
       const submissionId = match[1];
-      console.log("Submission ID:", submissionId);
       checkSubmission(submissionId);
     }
   },
