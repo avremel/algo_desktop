@@ -146,7 +146,7 @@ module.exports = {
         id: user._id,
         username: user.username,
         fullName: user.fullName,
-        role: user?.role,
+        role: user.role,
         token,
       };
     },
